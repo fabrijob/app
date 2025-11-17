@@ -1,45 +1,44 @@
+project_name = "linuxtips-ecs"
+
 region = "us-east-1"
 
-cluster_name = "linuxtips-ecs-cluster"
-
-service_name = "linuxtips-app"
+cluster_name = "linuxtips-ecs"
 
 service_port = 8080
 
-service_cpu    = 256
+service_name = "linuxtips-app"
+
+service_cpu = 256
+
 service_memory = 512
 
-service_launch_type = [
-  {
-    capacity_provider = "FARGATE"
-    weight            = 50
-  },
-  {
-    capacity_provider = "FARGATE_SPOT"
-    weight            = 50
-  }
-]
 
-service_task_count = 3
+###SSM ##
+
+ssm_subnet_private_1a = "/linuxtips-vpc/vpc/subnet_private_1a"
+
+ssm_subnet_private_1b = "/linuxtips-vpc/vpc/subnet_private_1b"
+
+ssm_subnet_private_1c = "/linuxtips-vpc/vpc/subnet_private_1c"
 
 ssm_vpc_id = "/linuxtips-vpc/vpc/vpc_id"
 
-ssm_listener = "/linuxtips/ecs/lb/internal/listerner"
-ssm_alb      = "/linuxtips/ecs/lb/internal/id"
+ssm_listener = "/linuxtips/ecs/tb/listener"
 
-ssm_private_subnet_1 = "/linuxtips-vpc/vpc/subnet_private_1a"
-ssm_private_subnet_2 = "/linuxtips-vpc/vpc/subnet_private_1b"
-ssm_private_subnet_3 = "/linuxtips-vpc/vpc/subnet_private_1c"
-
-service_hosts = [
-  # "app.linuxtips.demo",
-  "app.linuxtips-ecs-cluster.internal.com"
-]
-
-environment_variables = [
-]
+ssm_alb = "/linuxtips/ecs/lb/id"
 
 capabilities = ["EC2"]
+
+environment_variables = [
+  {
+    name  = "FOO"
+    value = "BAR"
+  },
+  {
+    name  = "PING"
+    value = "PONG"
+  }
+]
 
 service_healthcheck = {
   healthy_threshold   = 3
@@ -51,10 +50,28 @@ service_healthcheck = {
   port                = 8080
 }
 
+service_launch_type = [
+  {
+    capacity_provider = "FARGATE"
+    weight            = 0
+  },
+  {
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 100
+  }
+]
 
-scale_type   = "requests_tracking"
-task_minimum = 3
-task_maximum = 12
+service_task_count = 3
+
+service_hosts = [
+  "app.linuxtips.demo"
+]
+
+scale_type = "requests_tracking"
+
+task_minimun = 3
+
+task_maximum = 6
 
 ### Autoscaling de CPU
 
@@ -74,8 +91,6 @@ scale_in_period              = 60
 scale_in_evaluation_periods  = 2
 scale_in_cooldown            = 60
 
-scale_tracking_cpu      = 50
+scale_tracking_cpu = 50
+
 scale_tracking_requests = 30
-
-
-ssm_service_discovery_namespace = "/linuxtips/ecs/cloudmap/namespace"
