@@ -4,8 +4,6 @@ WORKDIR /root/src/app
 
 COPY . ./
 
-RUN go get -u
-
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 FROM fidelissauro/apko-run:latest-amd64
