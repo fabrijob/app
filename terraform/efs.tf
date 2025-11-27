@@ -26,7 +26,7 @@ resource "aws_security_group" "efs" {
 
 resource "aws_efs_mount_target" "mount_subnet_1" {
   file_system_id = aws_efs_file_system.main.id
-  subnet_id      = data.aws_ssm_parameter.private_subnet_1.value
+  subnet_id      = data.aws_ssm_parameter.subnet_private_1a.value
   security_groups = [
     aws_security_group.efs.id
   ]
@@ -34,7 +34,7 @@ resource "aws_efs_mount_target" "mount_subnet_1" {
 
 resource "aws_efs_mount_target" "mount_subnet_2" {
   file_system_id = aws_efs_file_system.main.id
-  subnet_id      = data.aws_ssm_parameter.private_subnet_2.value
+  subnet_id      = data.aws_ssm_parameter.private_subnet_1b.value
   security_groups = [
     aws_security_group.efs.id
   ]
@@ -42,7 +42,7 @@ resource "aws_efs_mount_target" "mount_subnet_2" {
 
 resource "aws_efs_mount_target" "mount_subnet_3" {
   file_system_id = aws_efs_file_system.main.id
-  subnet_id      = data.aws_ssm_parameter.private_subnet_3.value
+  subnet_id      = data.aws_ssm_parameter.private_subnet_1c.value
   security_groups = [
     aws_security_group.efs.id
   ]
