@@ -1,5 +1,5 @@
 module "service" {
-  source = "github.com/fabrijob/ecs-service-module?ref=v1"
+  source = "github.com/fabrijob/ecs-service-module"
 
   cluster_name                = var.cluster_name
   region                      = var.region
@@ -15,7 +15,9 @@ module "service" {
   service_launch_type         = var.service_launch_type
   service_task_count          = var.service_task_count
   service_hosts               = var.service_hosts
-  container_image             = var.container_image
+
+
+  container_image = var.container_image
 
   vpc_id = data.aws_ssm_parameter.vpc_id.value
   private_subnets = [
@@ -24,6 +26,15 @@ module "service" {
     data.aws_ssm_parameter.subnet_private_1c.value
   ]
 
+  efs_volumes = [
+    {
+      volume_name      = "volume-de-exemplo"
+      file_system_id   = aws_efs_file_system.main.id
+      file_system_root = "/"
+      mount_point      = "/mnt/efs"
+      read_only        = false
+    }
+  ]
   scale_type = var.scale_type
 
   task_minimun = var.task_minimun
